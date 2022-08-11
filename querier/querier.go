@@ -3,12 +3,13 @@ package querier
 import (
 	"context"
 	"github.com/algorand/go-algorand-sdk/client/v2/algod"
-	"github.com/algorand/go-algorand-sdk/encoding/msgpack"
-	"github.com/algorand/go-algorand-sdk/stateproofs/transactionverificationtypes"
+	"github.com/algorand/go-algorand-sdk/client/v2/common/models"
+	"github.com/almog-t/state-proof-query-service/servicestate"
 )
 
 type Querier struct {
-	client *algod.Client
+	client                  *algod.Client
+	lastCompletedProofRound uint64
 }
 
 func InitializeQuerier(algodAddress string, apiToken string) (*Querier, error) {
@@ -22,19 +23,6 @@ func InitializeQuerier(algodAddress string, apiToken string) (*Querier, error) {
 	}, nil
 }
 
-func (q *Querier) QueryStateProofData(round uint64) (transactionverificationtypes.Message,
-	*transactionverificationtypes.EncodedStateProof, error) {
-	stateProofData, err := q.client.GetStateProof(round).Do(context.Background())
-	if err != nil {
-		return transactionverificationtypes.Message{}, nil, err
-	}
-
-	var attestedMessage transactionverificationtypes.Message
-	err = msgpack.Decode(stateProofData.Message, &attestedMessage)
-
-	if err != nil {
-		return transactionverificationtypes.Message{}, nil, err
-	}
-
-	return attestedMessage, (*transactionverificationtypes.EncodedStateProof)(&stateProofData.Stateproof), nil
+func (q *Querier) QueryNextStateProofData(state *servicestate.ServiceState) (models.StateProof, error) {
+	return q.client.GetStateProof(state.SavedState.LastCompletedStateProof).Do(context.Background())
 }
