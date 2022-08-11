@@ -50,6 +50,6 @@ func (q *Querier) QueryNextStateProofData(state *servicestate.ServiceState) (*mo
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return &proof, nil
 }
