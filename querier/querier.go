@@ -5,6 +5,9 @@ import (
 	"github.com/algorand/go-algorand-sdk/client/v2/algod"
 	"github.com/algorand/go-algorand-sdk/client/v2/common/models"
 	"github.com/almog-t/state-proof-query-service/servicestate"
+	"os"
+	"path/filepath"
+	"strings"
 )
 
 type Querier struct {
@@ -12,8 +15,27 @@ type Querier struct {
 	lastCompletedProofRound uint64
 }
 
-func InitializeQuerier(algodAddress string, apiToken string) (*Querier, error) {
-	client, err := algod.MakeClient(algodAddress, apiToken)
+func readFromNodeFile(nodepath string) (string, error) {
+	contentBytes, err := os.ReadFile(nodepath)
+	if err != nil {
+		return "", err
+	}
+
+	return strings.Trim(string(contentBytes), "\n"), nil
+}
+
+func InitializeQuerier(nodePath string) (*Querier, error) {
+	algodAddress, err := readFromNodeFile(filepath.Join(nodePath, "algod.net"))
+	if err != nil {
+		return nil, err
+	}
+
+	apiToken, err := readFromNodeFile(filepath.Join(nodePath, "algod.admin.token"))
+	if err != nil {
+		return nil, err
+	}
+
+	client, err := algod.MakeClient("http://"+algodAddress, apiToken)
 	if err != nil {
 		return nil, err
 	}
@@ -24,5 +46,5 @@ func InitializeQuerier(algodAddress string, apiToken string) (*Querier, error) {
 }
 
 func (q *Querier) QueryNextStateProofData(state *servicestate.ServiceState) (models.StateProof, error) {
-	return q.client.GetStateProof(state.SavedState.LastCompletedStateProof).Do(context.Background())
+	return q.client.GetStateProof(state.SavedState.LatestCompletedAttestedRound + 1).Do(context.Background())
 }

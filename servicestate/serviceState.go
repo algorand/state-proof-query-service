@@ -7,7 +7,7 @@ import (
 )
 
 type SavedServiceState struct {
-	LastCompletedStateProof uint64
+	LatestCompletedAttestedRound uint64
 }
 
 type ServiceState struct {
@@ -17,7 +17,7 @@ type ServiceState struct {
 
 func InitializeState(filePath string) (*ServiceState, error) {
 	state := ServiceState{
-		SavedState: SavedServiceState{LastCompletedStateProof: 0},
+		SavedState: SavedServiceState{LatestCompletedAttestedRound: 0},
 		filePath:   filePath,
 	}
 
