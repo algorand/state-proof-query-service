@@ -45,6 +45,11 @@ func InitializeQuerier(nodePath string) (*Querier, error) {
 	}, nil
 }
 
-func (q *Querier) QueryNextStateProofData(state *servicestate.ServiceState) (models.StateProof, error) {
-	return q.client.GetStateProof(state.SavedState.LatestCompletedAttestedRound + 1).Do(context.Background())
+func (q *Querier) QueryNextStateProofData(state *servicestate.ServiceState) (*models.StateProof, error) {
+	proof, err := q.client.GetStateProof(state.SavedState.LatestCompletedAttestedRound + 1).Do(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	
+	return &proof, nil
 }
