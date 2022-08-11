@@ -1,11 +1,15 @@
 package writer
 
 import (
+	"bytes"
 	"fmt"
-	"github.com/algorand/go-algorand-sdk/client/v2/common/models"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
+	
+	"github.com/algorand/go-algorand-sdk/client/v2/common/models"
+	"github.com/algorand/go-algorand-sdk/encoding/json"
 )
 
 type Writer struct {
@@ -13,16 +17,29 @@ type Writer struct {
 	key    string
 }
 
-func (w *Writer) UploadStateProof(proof *models.StateProof) {
+func InitializeWriter(bucket string, key string) *Writer {
+	return &Writer{
+		bucket: bucket,
+		key:    key,
+	}
+}
+
+func (w *Writer) UploadStateProof(proof *models.StateProof) error {
+	encodedProof := json.Encode(proof)
+	proofReader := bytes.NewReader(encodedProof)
 	sess := session.Must(session.NewSession())
 	uploader := s3manager.NewUploader(sess)
 
 	result, err := uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(w.bucket),
 		Key:    aws.String(w.key),
-		Body:   proof[:],
+		Body:   proofReader,
 	})
+
 	if err != nil {
-		return fmt.Errorf("failed to upload file, %v", err)
+		return err
 	}
+
+	fmt.Printf("Uploaded proof to %s\n", result.Location)
+	return nil
 }
