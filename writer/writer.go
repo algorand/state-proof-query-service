@@ -26,7 +26,7 @@ func InitializeWriter(bucket string, key string) *Writer {
 	}
 }
 
-func (w *Writer) UploadStateProof(state servicestate.ServiceState, proof *models.StateProof) error {
+func (w *Writer) UploadStateProof(state *servicestate.ServiceState, proof *models.StateProof) error {
 	encodedProof := json.Encode(proof)
 	proofReader := bytes.NewReader(encodedProof)
 	sess := session.Must(session.NewSession())
