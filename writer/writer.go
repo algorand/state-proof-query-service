@@ -7,9 +7,11 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
-	
+
 	"github.com/algorand/go-algorand-sdk/client/v2/common/models"
 	"github.com/algorand/go-algorand-sdk/encoding/json"
+
+	"github.com/almog-t/state-proof-query-service/servicestate"
 )
 
 type Writer struct {
@@ -24,7 +26,7 @@ func InitializeWriter(bucket string, key string) *Writer {
 	}
 }
 
-func (w *Writer) UploadStateProof(proof *models.StateProof) error {
+func (w *Writer) UploadStateProof(state servicestate.ServiceState, proof *models.StateProof) error {
 	encodedProof := json.Encode(proof)
 	proofReader := bytes.NewReader(encodedProof)
 	sess := session.Must(session.NewSession())
@@ -41,5 +43,7 @@ func (w *Writer) UploadStateProof(proof *models.StateProof) error {
 	}
 
 	fmt.Printf("Uploaded proof to %s\n", result.Location)
+	state.SavedState.LatestCompletedAttestedRound = proof.Message.Lastattestedround
+
 	return nil
 }

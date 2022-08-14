@@ -10,17 +10,21 @@ import (
 )
 
 func fetchStateProof(state servicestate.ServiceState, nodeQuerier querier.Querier, s3Writer writer.Writer) error {
+	err := state.Load()
+	if err != nil {
+		return err
+	}
+
 	nextStateProofData, err := nodeQuerier.QueryNextStateProofData(state)
 	if err != nil {
 		return err
 	}
 
-	err = s3Writer.UploadStateProof(nextStateProofData)
+	err = s3Writer.UploadStateProof(state, nextStateProofData)
 	if err != nil {
 		return err
 	}
 
-	state.SavedState.LatestCompletedAttestedRound = 3
 	err = state.Save()
 	if err != nil {
 		return err
@@ -37,6 +41,9 @@ func main() {
 	}
 
 	nodeQuerier, err := querier.InitializeQuerier("http://127.0.0.1")
+	if err != nil {
+		fmt.Printf("Could not initialize querier: %s\n", err)
+	}
 
 	s3Writer := writer.InitializeWriter("bucket", "key")
 
