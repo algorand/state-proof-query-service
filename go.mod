@@ -14,4 +14,4 @@ require (
 	golang.org/x/crypto v0.0.0-20220722155217-630584e8d5aa // indirect
 )
 
-replace github.com/algorand/go-algorand-sdk => github.com/almog-t/go-algorand-sdk v1.14.1-0.20220811054122-5f5fc7d45a47
+replace github.com/algorand/go-algorand-sdk => github.com/almog-t/go-algorand-sdk v1.14.1-0.20220814075733-f4690f524e2d
