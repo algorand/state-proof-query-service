@@ -22,11 +22,7 @@ func InitializeState(filePath string) (*ServiceState, error) {
 	}
 
 	err := state.Load()
-	if err != os.ErrNotExist {
-		return nil, err
-	}
-
-	return &state, nil
+	return &state, err
 }
 
 func (s *ServiceState) Save() error {
@@ -43,6 +39,10 @@ func (s *ServiceState) Load() error {
 	encodedData, err := os.ReadFile(s.filePath)
 	if err != nil {
 		return err
+	}
+
+	if err == os.ErrNotExist {
+		return nil
 	}
 
 	err = json.Unmarshal(encodedData, &s.SavedState)
