@@ -1,8 +1,8 @@
 github.com/algorand/go-codec v1.1.8/go.mod h1:XhzVs6VVyWMLu6cApb9/192gBjGRVGm5cX5j203Heg4=
 github.com/algorand/go-codec/codec v1.1.8 h1:lsFuhcOH2LiEhpBH3BVUUkdevVmwCRyvb7FCAAPeY6U=
 github.com/algorand/go-codec/codec v1.1.8/go.mod h1:tQ3zAJ6ijTps6V+wp8KsGDnPC2uhHVC7ANyrtkIY0bA=
-github.com/almog-t/go-algorand-sdk v1.14.1-0.20220814075733-f4690f524e2d h1:/eIEHAVxbmSOo9P22+GHz+WcReixEXUCCvZau3/Wpek=
-github.com/almog-t/go-algorand-sdk v1.14.1-0.20220814075733-f4690f524e2d/go.mod h1:oX/3Bsd6Wy+D2ENuEZofZC05OsbpcDhHVTUsN0q5FbU=
+github.com/almog-t/go-algorand-sdk v1.14.1-0.20220815130753-4f4f4a46360f h1:K2b0YVAU1mKqS3UU31AY0a+IDpKYSIdSb+p/nJbd9uY=
+github.com/almog-t/go-algorand-sdk v1.14.1-0.20220815130753-4f4f4a46360f/go.mod h1:PYEcsVAjDlSI+fhFwzcZ7FFk6z7bgOi2wV9p973HMUg=
 github.com/aws/aws-sdk-go v1.44.73 h1:dfvXVwi4A5/GxsmtsWI6ryjSIqM9SG0DKyGrB7q0NV8=
 github.com/aws/aws-sdk-go v1.44.73/go.mod h1:y4AeaBuwd2Lk+GepC1E9v0qOiTws0MIWAX4oIKwKHZo=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
@@ -56,4 +56,4 @@ golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1/go.mod h1:I/5z698sn9Ka8T
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/yaml.v2 v2.2.8 h1:obN1ZagJSUGI0Ek/LBmuj4SNLPfIny3KsKFopxRdj10=
 gopkg.in/yaml.v2 v2.2.8/go.mod h1:hI93XBmqTisBFMUTm0b8Fm+jr3Dg1NNxqwp+5A1VGuI=
-gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b h1:h8qDotaEPuJATrMmW04NCwg7v22aHH28wwpauUhK9Oo=
+gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 h1:tQIYjPdBoyREyB9XMu+nnTclpTYkz2zFM+lzLJFO4gQ=
