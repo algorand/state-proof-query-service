@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 	"time"
-	
+
 	"github.com/almog-t/state-proof-query-service/querier"
 	"github.com/almog-t/state-proof-query-service/servicestate"
 	"github.com/almog-t/state-proof-query-service/writer"
@@ -38,8 +38,9 @@ func fetchStateProof(state *servicestate.ServiceState, nodeQuerier querier.Queri
 // TODO: Logging
 // TODO: What if the latest block is not in the network?
 // TODO: Separate file for bucket and key
+// TODO: Add configuration file
 func main() {
-	state, err := servicestate.InitializeState("state.txt")
+	state, err := servicestate.InitializeState("state.txt", 16)
 	if err != nil {
 		fmt.Printf("Could not initialize state: %s\n", err)
 		return
@@ -51,7 +52,7 @@ func main() {
 		return
 	}
 
-	s3Writer := writer.InitializeWriter(BUCKET, ACCESS_KEY)
+	s3Writer := writer.InitializeWriter(BUCKET, REGION, ACCESS_KEY, SECRET_KEY)
 
 	for {
 		err = fetchStateProof(state, *nodeQuerier, *s3Writer)

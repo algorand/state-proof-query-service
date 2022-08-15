@@ -2,6 +2,7 @@ package servicestate
 
 import (
 	"encoding/json"
+	"errors"
 	"io/fs"
 	"os"
 )
@@ -15,9 +16,9 @@ type ServiceState struct {
 	filePath   string
 }
 
-func InitializeState(filePath string) (*ServiceState, error) {
+func InitializeState(filePath string, genesisRound uint64) (*ServiceState, error) {
 	state := ServiceState{
-		SavedState: SavedServiceState{LatestCompletedAttestedRound: 0},
+		SavedState: SavedServiceState{LatestCompletedAttestedRound: genesisRound},
 		filePath:   filePath,
 	}
 
