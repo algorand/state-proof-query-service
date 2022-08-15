@@ -1,10 +1,7 @@
 package servicestate
 
 import (
-	"encoding/json"
-	"errors"
-	"io/fs"
-	"os"
+	"github.com/almog-t/state-proof-query-service/utilities"
 )
 
 type SavedServiceState struct {
@@ -27,25 +24,9 @@ func InitializeState(filePath string, genesisRound uint64) (*ServiceState, error
 }
 
 func (s *ServiceState) Save() error {
-	encodedData, err := json.Marshal(s.SavedState)
-	if err != nil {
-		return err
-	}
-
-	err = os.WriteFile(s.filePath, encodedData, fs.ModePerm)
-	return err
+	return utilities.EncodeToFile(s.SavedState, s.filePath)
 }
 
 func (s *ServiceState) Load() error {
-	encodedData, err := os.ReadFile(s.filePath)
-	if errors.Is(err, os.ErrNotExist) {
-		return nil
-	}
-
-	if err != nil {
-		return err
-	}
-
-	err = json.Unmarshal(encodedData, &s.SavedState)
-	return err
+	return utilities.DecodeFromFile(&s.SavedState, s.filePath)
 }
