@@ -11,8 +11,7 @@ import (
 )
 
 type Querier struct {
-	client                  *algod.Client
-	lastCompletedProofRound uint64
+	client *algod.Client
 }
 
 func readFromNodeFile(nodepath string) (string, error) {
