@@ -49,7 +49,6 @@ func fetchStateProof(state *servicestate.ServiceState, nodeQuerier querier.Queri
 }
 
 // TODO: Logging
-// TODO: What if the latest block is not in the network?
 func main() {
 	var config ServiceConfiguration
 	err := utilities.DecodeFromFile(&config, "config.json")
@@ -74,7 +73,7 @@ func main() {
 			continue
 		}
 
-		if strings.Contains(err.Error(), "HTTP 404") {
+		if strings.Contains(err.Error(), "HTTP 404") || strings.Contains(err.Error(), "given round is greater than the latest round") {
 			time.Sleep(config.BackoffTimeMs * time.Millisecond)
 			continue
 		}
