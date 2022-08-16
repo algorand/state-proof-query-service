@@ -4,19 +4,15 @@ import (
 	"github.com/almog-t/state-proof-query-service/utilities"
 )
 
-type SavedServiceState struct {
-	LatestCompletedAttestedRound uint64
-}
-
 type ServiceState struct {
-	SavedState SavedServiceState
-	filePath   string
+	LatestCompletedAttestedRound uint64
+	filePath                     string
 }
 
 func InitializeState(filePath string, genesisRound uint64) (*ServiceState, error) {
 	state := ServiceState{
-		SavedState: SavedServiceState{LatestCompletedAttestedRound: genesisRound},
-		filePath:   filePath,
+		LatestCompletedAttestedRound: genesisRound,
+		filePath:                     filePath,
 	}
 
 	err := state.Load()
@@ -24,9 +20,9 @@ func InitializeState(filePath string, genesisRound uint64) (*ServiceState, error
 }
 
 func (s *ServiceState) Save() error {
-	return utilities.EncodeToFile(s.SavedState, s.filePath)
+	return utilities.EncodeToFile(&s, s.filePath)
 }
 
 func (s *ServiceState) Load() error {
-	return utilities.DecodeFromFile(&s.SavedState, s.filePath)
+	return utilities.DecodeFromFile(&s, s.filePath)
 }

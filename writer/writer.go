@@ -52,7 +52,7 @@ func (w *Writer) UploadStateProof(state *servicestate.ServiceState, proof *model
 	if err != nil {
 		return err
 	}
-	state.SavedState.LatestCompletedAttestedRound = proof.Message.Lastattestedround
+	state.LatestCompletedAttestedRound = proof.Message.Lastattestedround
 
 	return nil
 }
