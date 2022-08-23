@@ -1,7 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"log"
+	"os"
 	"strings"
 	"time"
 
@@ -40,6 +41,7 @@ func fetchStateProof(state *servicestate.ServiceState, nodeQuerier querier.Queri
 		return err
 	}
 
+	log.Printf("Fetched proof for round %d", nextStateProofData.Message.Lastattestedround)
 	err = state.Save()
 	if err != nil {
 		return err
@@ -48,20 +50,25 @@ func fetchStateProof(state *servicestate.ServiceState, nodeQuerier querier.Queri
 	return nil
 }
 
-// TODO: Logging
 func main() {
 	var config ServiceConfiguration
 	err := utilities.DecodeFromFile(&config, "config.json")
 
+	logFile, err := os.OpenFile(config.LogPath, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatalf("error opening file log file: %s", err)
+	}
+
+	log.SetOutput(logFile)
 	state, err := servicestate.InitializeState(config.StatePath, config.GenesisRound)
 	if err != nil {
-		fmt.Printf("Could not initialize state: %s\n", err)
+		log.Printf("Could not initialize state: %s", err)
 		return
 	}
 
 	nodeQuerier, err := querier.InitializeQuerier(config.NodePath)
 	if err != nil {
-		fmt.Printf("Could not initialize querier: %s\n", err)
+		log.Printf("Could not initialize querier: %s", err)
 		return
 	}
 
@@ -78,7 +85,7 @@ func main() {
 			continue
 		}
 
-		fmt.Printf("Error while fetching state proof: %s\n", err)
+		log.Printf("Error while fetching state proof: %s", err)
 		break
 	}
 }
